@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:beaconapp/authentication_text_form_field.dart';
 
 class AuthenticationScreen extends StatefulWidget {
   const AuthenticationScreen({super.key});
@@ -9,6 +10,8 @@ class AuthenticationScreen extends StatefulWidget {
 
 class _AuthenticationScreenState extends State<AuthenticationScreen> {
   final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final passwordConfirmationController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -17,27 +20,20 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
         child: Column(
           children: [
             const SizedBox(height: 50),
-            TextFormField(
-              controller: emailController,
-              decoration: InputDecoration(
-                floatingLabelStyle: Theme.of(context).textTheme.titleLarge,
-                icon: Icon(
-                  Icons.email,
-                  color: Theme.of(context).primaryColor,
-                ),
-                labelText: 'Email',
+            AuthenticationTextFormField(
+              icon: Icons.email, 
+              label: 'Email',
+              textEditingController: emailController,
               ),
-            ), // eamil getter
-            TextFormField(),
-            TextFormField(),
+              AuthenticationTextFormField(
+              icon: Icons.password, 
+              label: 'Password',
+              textEditingController: emailController,
+              ),
             ElevatedButton(
               onPressed: () {}, 
-              child: const Text('Register'),
+              child: const Text('Login'),
               ) ,
-            InkWell(
-              onTap: () {},
-              child: const Text('Login instead'),
-            )
           ],
         ),
       ),
