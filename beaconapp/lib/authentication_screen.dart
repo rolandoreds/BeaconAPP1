@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:beaconapp/calendar.dart';
 
 class AuthenticationScreen extends StatefulWidget {
   const AuthenticationScreen({super.key});
@@ -37,7 +38,19 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
             InkWell(
               onTap: () {},
               child: const Text('Login instead'),
-            )
+            ),
+
+            // Button that switches to Calendar page
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CalendarPage()),
+                );
+              }, 
+              child: const Text('Calendar'),
+              ) ,
+
           ],
         ),
       ),
