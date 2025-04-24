@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:beaconapp/authentication_text_form_field.dart';
+import 'package:beaconapp/calendar.dart';
 
 class AuthenticationScreen extends StatefulWidget {
   const AuthenticationScreen({super.key});
@@ -23,20 +25,26 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
               icon: Icons.email, 
               label: 'Email',
               textEditingController: emailController,
-              ),
-              AuthenticationTextFormField(
+            ),
+            AuthenticationTextFormField(
               icon: Icons.password, 
               label: 'Password',
               textEditingController: emailController,
-              ),
+            ),
             ElevatedButton(
               onPressed: () {}, 
               child: const Text('Login'),
               ) ,
-            InkWell(
-              onTap: () {},
-              child: const Text('Login instead'),
-            )
+             // Button that switches to Calendar page
+            ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CalendarPage()),
+                );
+              }, 
+              child: const Text('Calendar'),
+            ),
           ],
         ),
       ),
