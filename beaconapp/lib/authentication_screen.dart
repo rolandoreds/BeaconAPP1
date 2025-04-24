@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:beaconapp/authentication_text_form_field.dart';
 
 class AuthenticationScreen extends StatefulWidget {
   const AuthenticationScreen({super.key});
@@ -34,6 +33,10 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
               onPressed: () {}, 
               child: const Text('Login'),
               ) ,
+            InkWell(
+              onTap: () {},
+              child: const Text('Login instead'),
+            )
           ],
         ),
       ),
