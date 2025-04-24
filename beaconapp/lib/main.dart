@@ -37,7 +37,7 @@ class MyAppState extends State<MyApp> {
 @override
 Widget build(BuildContext context) {
   return Scaffold(
-    appBar: AppBar(title: Text("Welcome To Canada College!")),
+    appBar: AppBar(title: Text("Welcome To Canada College")),
     body: content(),
   );
 }
