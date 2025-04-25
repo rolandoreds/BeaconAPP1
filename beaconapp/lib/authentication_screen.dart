@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:beaconapp/authentication_text_form_field.dart';
 import 'package:beaconapp/calendar.dart';
 
 class AuthenticationScreen extends StatefulWidget {
@@ -10,6 +11,8 @@ class AuthenticationScreen extends StatefulWidget {
 
 class _AuthenticationScreenState extends State<AuthenticationScreen> {
   final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final passwordConfirmationController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -18,29 +21,21 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
         child: Column(
           children: [
             const SizedBox(height: 50),
-            TextFormField(
-              controller: emailController,
-              decoration: InputDecoration(
-                floatingLabelStyle: Theme.of(context).textTheme.titleLarge,
-                icon: Icon(
-                  Icons.email,
-                  color: Theme.of(context).primaryColor,
-                ),
-                labelText: 'Email',
-              ),
-            ), // eamil getter
-            TextFormField(),
-            TextFormField(),
+            AuthenticationTextFormField(
+              icon: Icons.email, 
+              label: 'Email',
+              textEditingController: emailController,
+            ),
+            AuthenticationTextFormField(
+              icon: Icons.password, 
+              label: 'Password',
+              textEditingController: emailController,
+            ),
             ElevatedButton(
               onPressed: () {}, 
-              child: const Text('Register'),
+              child: const Text('Login'),
               ) ,
-            InkWell(
-              onTap: () {},
-              child: const Text('Login instead'),
-            ),
-
-            // Button that switches to Calendar page
+             // Button that switches to Calendar page
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -49,8 +44,7 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                 );
               }, 
               child: const Text('Calendar'),
-              ) ,
-
+            ),
           ],
         ),
       ),
