@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:beaconapp/authentication/authentication_text_form_field.dart';
 import 'package:beaconapp/calendar/calendar_screen.dart';
 import 'package:beaconapp/authentication/wave.dart';
+import 'package:beaconapp/home.dart';
 
 class AuthenticationScreen extends StatefulWidget {
   const AuthenticationScreen({super.key});
@@ -52,7 +53,12 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                       minimumSize: const Size.fromHeight(50),
                       backgroundColor: Theme.of(context).colorScheme.primary,
                     ),
-                    onPressed: () {}, 
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                          MaterialPageRoute(builder: (context) => const HomePage()),
+          );
+                    }, 
                     child: Text (
                       'Login',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
