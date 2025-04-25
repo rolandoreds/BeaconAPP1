@@ -2,150 +2,117 @@ import 'package:beaconapp/tab_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'package:table_calendar/table_calendar.dart';
+import 'calendar_widget.dart'; // <-- new import
 
-
-// The guy in the tutorial did this
 class CalendarPage extends StatefulWidget {
-  const CalendarPage( {super.key} );
+  const CalendarPage({super.key});
 
   @override
   State<CalendarPage> createState() => _CalendarPageState();
 }
 
-// TO-DO: add opaque SMCCD logo behind calendar
-// This is the calendar class
 class _CalendarPageState extends State<CalendarPage> {
-  DateTime today = DateTime.now();
+  String selectedDateStr = '';
+  DateTime _focusedDay = DateTime.now();
+  DateTime? _selectedDay;
   final double tabBarHeight = 150;
 
-@override
-Widget build(BuildContext context) {
-  BorderRadiusGeometry radius = BorderRadius.only(
-    topLeft: Radius.circular(24.0),
-    topRight: Radius.circular(24.0),
-  );
-  
-  return Scaffold(
-    appBar: AppBar(title: Text("Academic Calendar")),
-    body: SlidingUpPanel(
-      minHeight: 175,
-      maxHeight: MediaQuery.of(context).size.height,
-      panelBuilder: (scrollController) => buildSlidingPanel(
-        scrollController: scrollController,
-        ),
+  // Use a fixed initial height instead of dynamic calculation
+  double panelMinHeight = 175;
 
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              margin: EdgeInsets.all(16),
-              child: TableCalendar(
-                locale: "en_US",
-                headerStyle: HeaderStyle(
-                  formatButtonVisible: false,
-                  titleCentered: true,
-                ),
-                availableGestures: AvailableGestures.all,
-                focusedDay: today,
-                firstDay: DateTime.utc(2025, 01, 01),
-                lastDay: DateTime.utc(2030, 06, 03),
-              ),
-            ),
-          ],
-        ),
+  @override
+  void initState() {
+    super.initState();
+    _selectedDay = DateTime.now();
+    selectedDateStr = DateFormat('MMMM d, y').format(_selectedDay!);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Get screen dimensions
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Academic Calendar"),
+        backgroundColor: Color.fromARGB(255, 58, 101, 62),
       ),
-    ),
-  );
-}
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          // Use a simpler approach - position the panel at approximately 60% of screen height
+          // This is a safer approach than trying to measure the calendar directly
+          final panelMinHeight = screenHeight - 460;
+          
+        return SlidingUpPanel(
+          minHeight: panelMinHeight,
+          maxHeight: screenHeight * 0.96,
+          panelBuilder: (scrollController) => buildSlidingPanel(
+            scrollController: scrollController,
+        ),
+          body: CalendarWidget(
+            selectedDay: _selectedDay,
+            focusedDay: _focusedDay,
+            onDaySelected: (selectedDay, focusedDay) {
+              setState(() {
+                _selectedDay = selectedDay;
+                _focusedDay = focusedDay;
+                selectedDateStr = DateFormat('MMMM d, y').format(selectedDay);
+                });
+              },
+            ),
+          );
+        }
+      ),
+    );
+  }
 
   Widget buildSlidingPanel({
     required ScrollController scrollController,
-  }) => 
-  DefaultTabController(
-    length: 2,
-    child: Scaffold(
-      appBar: buildTabBar(),
-      body: TabBarView(
-        children: [
-          TabWidget(scrollController: scrollController),
-          TabWidget(scrollController: scrollController),
-        ],
-      ),
-    ),
-  );
-  
-  PreferredSizeWidget buildTabBar() => PreferredSize(
-    preferredSize: Size.fromHeight(tabBarHeight),
-    child: AppBar(
-      title: buildDragIcon(), //Icon(Icons.drag_handle),
-      automaticallyImplyLeading: false,
-      centerTitle: true, 
-      bottom: PreferredSize(
-        preferredSize: Size.fromHeight(tabBarHeight),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
+  }) =>
+      DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: buildTabBar(),
+          body: TabBarView(
+            children: [
+              TabWidget(scrollController: scrollController),
+              TabWidget(scrollController: scrollController),
+            ],
+          ),
+        ),
+      );
+
+  PreferredSizeWidget buildTabBar() => AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: false,
+        title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              width: double.infinity,
-              padding: EdgeInsets.symmetric(horizontal: 16),
-              child: Text(
-                DateFormat('MMMM d, y').format(DateTime.now()),
-                textAlign: TextAlign.left,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 16,
-                )
+            Center(child: buildDragIcon()),
+            SizedBox(height: 8),
+            Text(
+              selectedDateStr,
+              style: TextStyle(
+                color: Colors.black,
+                fontSize: 20,
               ),
             ),
-
-            TabBar(
-              tabs: [
-                Tab(child: Text('Homework')),
-                Tab(child: Text('Events')),
-              ],
-            )
           ],
-        )
-      )
-      
-      
-    ),
-  );
-  
-  Widget buildDragIcon() => Container(
-    decoration: BoxDecoration(
-      color: Colors.grey,
-      borderRadius: BorderRadius.circular(8)
-    ),
-    width: 50,
-    height: 6,
-
-  );
-
-// Do not pay attention to this
-// Keeping just in case
-/* 
-  Widget content() {
-    return Column(
-      children: [
-        Text("Spring"),
-        Container(
-          child: TableCalendar(
-            locale: "en_US",
-            headerStyle: 
-              HeaderStyle(formatButtonVisible: false, titleCentered: true),
-            availableGestures: AvailableGestures.all,
-            focusedDay: today, 
-            firstDay: DateTime.utc(2025, 01, 01), 
-            lastDay: DateTime.utc(2030, 06, 3)
-            ),
         ),
-        SlidingUpPanel(
-          panel: Center(child: Text("This is the sliding Widget"),),
-        )
-      ],
-    );
-  }
-  */
+        bottom: TabBar(
+          tabs: [
+            Tab(child: Text('Homework')),
+            Tab(child: Text('Events')),
+          ],
+        ),
+      );
+
+  Widget buildDragIcon() => Container(
+        decoration: BoxDecoration(
+          color: Colors.grey,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        width: 50,
+        height: 4,
+      );
 }

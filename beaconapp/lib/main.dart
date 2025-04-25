@@ -10,7 +10,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.green),
+        colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 58, 101, 62)),
         useMaterial3: true,
       ),
       // Goes the sign in screen first, should go to calendar next
