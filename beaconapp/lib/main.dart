@@ -1,4 +1,4 @@
-import 'package:beaconapp/authentication_screen.dart';
+import 'package:beaconapp/authentication/authentication_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(const MainApp());
