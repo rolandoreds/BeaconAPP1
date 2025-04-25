@@ -1,8 +1,8 @@
-import 'package:beaconapp/tab_widget.dart';
+import 'package:beaconapp/calendar/tab_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'calendar_widget.dart'; // <-- new import
+import 'calendar_widget.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
@@ -15,9 +15,6 @@ class _CalendarPageState extends State<CalendarPage> {
   String selectedDateStr = '';
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
-  final double tabBarHeight = 150;
-
-  // Use a fixed initial height instead of dynamic calculation
   double panelMinHeight = 175;
 
   @override
@@ -35,30 +32,30 @@ class _CalendarPageState extends State<CalendarPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Academic Calendar"),
-        backgroundColor: Color.fromARGB(255, 58, 101, 62),
+        backgroundColor: Theme.of(context).colorScheme.primary,
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
-          // Use a simpler approach - position the panel at approximately 60% of screen height
-          // This is a safer approach than trying to measure the calendar directly
-          final panelMinHeight = screenHeight - 460;
+          final panelMinHeight = screenHeight - 490;
           
-        return SlidingUpPanel(
-          minHeight: panelMinHeight,
-          maxHeight: screenHeight * 0.96,
-          panelBuilder: (scrollController) => buildSlidingPanel(
-            scrollController: scrollController,
-        ),
-          body: CalendarWidget(
-            selectedDay: _selectedDay,
-            focusedDay: _focusedDay,
-            onDaySelected: (selectedDay, focusedDay) {
-              setState(() {
-                _selectedDay = selectedDay;
-                _focusedDay = focusedDay;
-                selectedDateStr = DateFormat('MMMM d, y').format(selectedDay);
+          return SlidingUpPanel(
+            minHeight: panelMinHeight,
+            maxHeight: screenHeight * 0.96,
+            panelBuilder: (scrollController) => buildSlidingPanel(
+              scrollController: scrollController,
+            ),
+            body: CalendarWidget(
+              /*
+              selectedDay: _selectedDay,
+              focusedDay: _focusedDay,
+              onDaySelected: (selectedDay, focusedDay) {
+                setState(() {
+                  _selectedDay = selectedDay;
+                  _focusedDay = focusedDay;
+                  selectedDateStr = DateFormat('MMMM d, y').format(selectedDay);
                 });
               },
+              */
             ),
           );
         }

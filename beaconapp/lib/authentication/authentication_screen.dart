@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:beaconapp/authentication/authentication_text_form_field.dart';
-import 'package:beaconapp/calendar.dart';
+import 'package:beaconapp/calendar/calendar_screen.dart';
 import 'package:beaconapp/authentication/wave.dart';
 
 class AuthenticationScreen extends StatefulWidget {
