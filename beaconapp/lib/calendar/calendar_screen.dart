@@ -45,7 +45,6 @@ class _CalendarPageState extends State<CalendarPage> {
               scrollController: scrollController,
             ),
             body: CalendarWidget(
-              /*
               selectedDay: _selectedDay,
               focusedDay: _focusedDay,
               onDaySelected: (selectedDay, focusedDay) {
@@ -55,7 +54,6 @@ class _CalendarPageState extends State<CalendarPage> {
                   selectedDateStr = DateFormat('MMMM d, y').format(selectedDay);
                 });
               },
-              */
             ),
           );
         }
