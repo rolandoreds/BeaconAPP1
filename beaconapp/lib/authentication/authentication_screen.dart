@@ -1,9 +1,116 @@
+/*
+ * Name: Authentication Screen
+ * Details: Um I mean its pretty obvious
+ * Features: User Interface, username & password authentication
+ * By: Edwin
+*/
+
 import 'package:flutter/material.dart';
-import 'package:beaconapp/authentication/authentication_text_form_field.dart';
+import 'package:flutter/services.dart' show rootBundle;
+import 'dart:convert'; // LineSplitter
+
 import 'package:beaconapp/calendar/calendar_screen.dart';
 import 'package:beaconapp/authentication/wave.dart';
 import 'package:beaconapp/home.dart';
 
+/// Global repository instance so any widget can call `authenticate()`.
+final AuthRepository authRepo = AuthRepository();
+
+/*
+ * AuthRepository — loads two text assets into an in‑memory Map for O(1) lookup (CIS 286)
+ * By: Edwin Dominguez AKA PAPI
+ * Notes: I'm realizing by the day how much I don't like Java...
+ */
+class AuthRepository {
+  late final Map<String, String> _creds; // username → password
+
+  // grabs dat file thats in the repective dir path
+  Future<void> grabdat() async {
+    final usernames = await _loadLines('assets/tmpFiles/usernames.txt');
+    final passwords = await _loadLines('assets/tmpFiles/passwords.txt');
+    final len = usernames.length < passwords.length ? usernames.length : passwords.length;
+    _creds = { for (var i = 0; i < len; i++) usernames[i] : passwords[i] };
+  }
+
+  // function that laods txt file and trims it to get raw text
+  Future<List<String>> _loadLines(String assetPath) async {
+    final raw = await rootBundle.loadString(assetPath);
+    return const LineSplitter().convert(raw)
+        .map((s) => s.trim())
+        .where((s) => s.isNotEmpty)
+        .toList();
+  }
+
+  // function called by class to compare text
+  bool authenticate(String username, String password) {
+    final stored = _creds[username];
+    return stored != null && stored == password;
+  }
+}
+
+/* *
+ * Class: AuthenticationTextFormField — stateless reusable field with inline validation
+ * By: Yours truly, Edwin
+ * Notes: I forgot what I was going to say *** do this later
+ */
+class AuthenticationTextFormField extends StatelessWidget {
+  const AuthenticationTextFormField({
+    super.key,
+    required this.icon,
+    required this.label,
+    required this.textEditingController,
+    this.confirmationController,
+  });
+
+  final IconData icon;
+  final String label;
+  final TextEditingController textEditingController;
+  final TextEditingController? confirmationController;
+
+  String? _validate(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'This field cannot be empty.';
+    }
+
+    final isUsername = label.toLowerCase().contains('username');
+    final isPassword = label.toLowerCase().contains('password');
+
+    if (isUsername && value.length <= 2) {
+      return 'Please enter your username.';
+    }
+
+    if (isPassword) {
+      if (value.length <= 4) return 'The password must be at least 4 characters.';
+      // When both controllers are present, validate credentials.
+      if (confirmationController != null &&
+          !authRepo.authenticate(confirmationController!.text.trim(), value)) {
+        return 'Incorrect Username or Password.';
+      }
+    }
+    return null;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return TextFormField(
+      controller: textEditingController,
+      obscureText: label.toLowerCase().contains('password'),
+      decoration: InputDecoration(
+        floatingLabelStyle: theme.textTheme.titleLarge,
+        icon: Icon(icon, color: theme.colorScheme.primary),
+        labelText: label,
+      ),
+      validator: _validate,
+    );
+  }
+}
+
+/*
+ * Class: AuthenticationScreen used by your main.dart
+ * Note: Um, remind me to add notes to functions but I Wanna push and go to class
+*/ 
 class AuthenticationScreen extends StatefulWidget {
   const AuthenticationScreen({super.key});
 
@@ -13,12 +120,25 @@ class AuthenticationScreen extends StatefulWidget {
 
 class _AuthenticationScreenState extends State<AuthenticationScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey();
-  final emailController = TextEditingController();
-  final passwordController = TextEditingController();
+  final _usernameCtrl = TextEditingController();
+  final _passwordCtrl = TextEditingController();
   bool employeeSwitch = true;
+  bool _loading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    authRepo.grabdat().whenComplete(() => setState(() => _loading = false));
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (_loading) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return Scaffold(
       body: Column(
         children: [
@@ -29,45 +149,57 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 25),
               child: Column(
                 children: [
-                  // standard box height 
                   const SizedBox(height: 50),
 
-                  // User Enters User Name here OBV
+                  // Username field
                   AuthenticationTextFormField(
-                    icon: employeeSwitch ? Icons.account_circle_outlined : Icons.assignment_ind_outlined,
+                    icon: employeeSwitch
+                        ? Icons.account_circle_outlined
+                        : Icons.assignment_ind_outlined,
                     label: 'Username',
-                    textEditingController: emailController,
+                    textEditingController: _usernameCtrl,
                   ),
 
-                  // User Enters Password Here OBV
+                  // Password field
                   AuthenticationTextFormField(
-                    icon: Icons.password, 
+                    icon: Icons.password,
                     label: 'Password',
-                    textEditingController: passwordController,
+                    textEditingController: _passwordCtrl,
+                    confirmationController: _usernameCtrl,
                   ),
 
-                  // Login Button -- future update authentication
-                  const SizedBox(height: 25,),
+                  const SizedBox(height: 25),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       minimumSize: const Size.fromHeight(50),
                       backgroundColor: Theme.of(context).colorScheme.primary,
                     ),
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                          MaterialPageRoute(builder: (context) => const HomePage()),
-          );
-                    }, 
-                    child: Text (
+                      if (_formKey.currentState!.validate()) {
+                        final ok = authRepo.authenticate(
+                          _usernameCtrl.text.trim(),
+                          _passwordCtrl.text,
+                        );
+                        if (ok) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (_) => const HomePage()),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Username and password do not match.')),
+                          );
+                        }
+                      }
+                    },
+                    child: Text(
                       'Login',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             color: Colors.white,
                           ),
                     ),
-                  ) ,
+                  ),
 
-                  // button that switches between student and employee portal
                   const SizedBox(height: 20),
                   InkWell(
                     onTap: () {
@@ -75,17 +207,16 @@ class _AuthenticationScreenState extends State<AuthenticationScreen> {
                       _formKey.currentState?.reset();
                     },
                     child: Text(
-                      employeeSwitch == true ? 'Employee Login' : 'Student Login',
+                      employeeSwitch ? 'Employee Login' : 'Student Login',
                     ),
                   ),
 
-                  // "Ugly" Button that switches to Calendar page by Thetawave_
-                  const SizedBox(height: 25,),
+                  const SizedBox(height: 25),
                   ElevatedButton(
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const CalendarPage()),
+                        MaterialPageRoute(builder: (_) => const CalendarPage()),
                       );
                     },
                     child: const Text('Calendar'),
