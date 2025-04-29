@@ -79,7 +79,7 @@ class ProfilePage extends StatelessWidget {
                         ),
                         SizedBox(height: 8),
                         Text(
-                          'computer science student always looking for new freinds!',
+                          'Computer Science student always looking for new freinds!',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 15,
@@ -117,17 +117,17 @@ class ProfilePage extends StatelessWidget {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        '-computer science major',
+                        '- Computer Science major',
                         style: TextStyle(fontSize: 16),
                       ),
                       SizedBox(height: 4),
                       Text(
-                        '-Engineering and Robotics club Cañada',
+                        '- Engineering and Robotics club Cañada',
                         style: TextStyle(fontSize: 16),
                       ),
                       SizedBox(height: 4),
                       Text(
-                        '-Math Club in Cañada',
+                        '- Math Club in Cañada',
                         style: TextStyle(fontSize: 16),
                       ),
                     ],
@@ -161,7 +161,7 @@ class ProfilePage extends StatelessWidget {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        'we built an app geared to help college students better suceed whether its graduating, applying to masters or transferring!',
+                        'We built an app geared to help college students better succeed whether its graduating, applying to masters or transferring!',
                         style: TextStyle(fontSize: 16),
                       ),
                     ],
