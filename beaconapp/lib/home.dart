@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:beaconapp/calendar/calendar_screen.dart';
 import 'package:beaconapp/profile.dart'; // Ensure this path matches your project structure
+import 'package:beaconapp/slide_in_menu.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -14,43 +14,12 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       // The drawer slides in from the left.
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: const BoxDecoration(
-                color: Color.fromARGB(255, 168, 207, 172),
-              ),
-              child: Text(
-                'directory',
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineSmall
-                    ?.copyWith(color: const Color.fromARGB(255, 0, 28, 4)),
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.calendar_today),
-              title: const Text('Calendar'),
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CalendarPage(),
-                  ),
-                );
-              },
-            ),
-          ],
-        ),
-      ),
+      drawer: MenuWidget(),
       appBar: AppBar(
         title: const Padding(
           padding: EdgeInsets.only(top: 0.0),
           child: Text(
-            'home page',
+            'Home Page',
             style: TextStyle(
               fontSize: 20,
               color: Color.fromARGB(255, 8, 35, 3),
@@ -101,7 +70,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   SizedBox(height: 8),
-                  Text('join us in our collaboration project!'),
+                  Text('Join us in our collaboration project!'),
                 ],
               ),
             ),
@@ -158,7 +127,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   SizedBox(height: 8),
-                  Text('4/26/2024 present app to smccd hackathon'),
+                  Text('4/25/2024 present app to smccd hackathon'),
                 ],
               ),
             ),

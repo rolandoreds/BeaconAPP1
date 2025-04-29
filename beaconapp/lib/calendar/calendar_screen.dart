@@ -1,8 +1,11 @@
+import 'package:beaconapp/calendar/calendar_utils.dart';
+import 'package:beaconapp/calendar/calendar_widget.dart';
+import 'package:beaconapp/slide_in_menu.dart';
 import 'package:beaconapp/calendar/tab_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
-import 'calendar_widget.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
@@ -12,27 +15,59 @@ class CalendarPage extends StatefulWidget {
 }
 
 class _CalendarPageState extends State<CalendarPage> {
+  late DateTime? _selectedDay;
+  late DateTime _focusedDay = DateTime.now();
   String selectedDateStr = '';
-  DateTime _focusedDay = DateTime.now();
-  DateTime? _selectedDay;
-  double panelMinHeight = 175;
+  late final ValueNotifier<List<Event>> _selectedHomework;
+  late final ValueNotifier<List<Event>> _selectedEvents;
+
+    @override
+    void initState() {
+      super.initState();
+      _selectedDay = _focusedDay;
+      _selectedHomework = ValueNotifier(_getHomeworkForDay(_selectedDay!));
+      _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
+      selectedDateStr = DateFormat('MMMM d, y').format(_selectedDay!);
+    }
 
   @override
-  void initState() {
-    super.initState();
-    _selectedDay = DateTime.now();
-    selectedDateStr = DateFormat('MMMM d, y').format(_selectedDay!);
+  void dispose() {
+    _selectedHomework.dispose();
+    _selectedEvents.dispose();
+    super.dispose();
+  }
+
+  List<Event> _getHomeworkForDay(DateTime day) {
+    // Implementation example
+    return kEvents[day] ?? [];
+  }
+
+    List<Event> _getEventsForDay(DateTime day) {
+    // Implementation example
+    return kEvents2[day] ?? [];
+  }
+
+  void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
+    if (!isSameDay(_selectedDay, selectedDay)) {
+      setState(() {
+        _selectedDay = selectedDay;
+        _focusedDay = focusedDay;
+      });
+
+      selectedDateStr = DateFormat('MMMM d, y').format(_selectedDay!);
+      _selectedHomework.value = _getHomeworkForDay(selectedDay);
+      _selectedEvents.value = _getEventsForDay(selectedDay);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    // Get screen dimensions
     final screenHeight = MediaQuery.of(context).size.height;
-
     return Scaffold(
+      drawer: MenuWidget(),
       appBar: AppBar(
-        title: const Text("Academic Calendar"),
-        backgroundColor: Theme.of(context).colorScheme.primary,
+        title: const Text('Calendar'),
+        //automaticallyImplyLeading: false,
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -45,22 +80,17 @@ class _CalendarPageState extends State<CalendarPage> {
               scrollController: scrollController,
             ),
             body: CalendarWidget(
-              selectedDay: _selectedDay,
               focusedDay: _focusedDay,
-              onDaySelected: (selectedDay, focusedDay) {
-                setState(() {
-                  _selectedDay = selectedDay;
-                  _focusedDay = focusedDay;
-                  selectedDateStr = DateFormat('MMMM d, y').format(selectedDay);
-                });
-              },
-            ),
+              selectedDay: _selectedDay,
+              onDaySelected: _onDaySelected,
+            )
           );
         }
-      ),
+      )
     );
   }
 
+  // Method that builds the SlidingUpPanel
   Widget buildSlidingPanel({
     required ScrollController scrollController,
   }) =>
@@ -68,15 +98,15 @@ class _CalendarPageState extends State<CalendarPage> {
         length: 2,
         child: Scaffold(
           appBar: buildTabBar(),
-          body: TabBarView(
-            children: [
-              TabWidget(scrollController: scrollController),
-              TabWidget(scrollController: scrollController),
-            ],
-          ),
+          body: TabWidget(
+            homework: _selectedHomework,
+            events: _selectedEvents,
+            scrollController: scrollController,
+          )
         ),
       );
 
+  // Method that decorates the Tabs in the SlidingUpPanel
   PreferredSizeWidget buildTabBar() => AppBar(
         automaticallyImplyLeading: false,
         centerTitle: false,
@@ -102,6 +132,7 @@ class _CalendarPageState extends State<CalendarPage> {
         ),
       );
 
+  // Method that creates the Icon used at the top of the SlidingUpPanel
   Widget buildDragIcon() => Container(
         decoration: BoxDecoration(
           color: Colors.grey,
