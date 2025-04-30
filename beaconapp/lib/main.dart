@@ -19,7 +19,7 @@ class MainApp extends StatelessWidget {
           primary: const Color.fromARGB(255, 58, 101, 62),
           secondary: Colors.green.shade100,
           tertiary: Colors.grey,
-          background: Colors.white,
+          onPrimary: Colors.white,
         ),
         useMaterial3: true,
       ),

@@ -95,13 +95,13 @@ class _CalendarWidgetState extends State<CalendarWidget> {
 
                   if (homework.isNotEmpty) {
                     markers.add(
-                      _buildMarkerDot(color: Colors.blue), // Homework = Blue
+                      _buildMarkerDot(color: Theme.of(context).colorScheme.tertiary), // Homework = Blue
                     );
                   }
 
                   if (normalEvents.isNotEmpty) {
                     markers.add(
-                      _buildMarkerDot(color: Colors.red), // Events = Red
+                      _buildMarkerDot(color: Theme.of(context).colorScheme.primary), // Events = Red
                     );
                   }
 

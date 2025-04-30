@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({Key? key}) : super(key: key);
+  const ProfilePage({super.key});
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
@@ -18,17 +18,17 @@ class ProfilePage extends StatelessWidget {
                 children: [
                   Container(
                     height: screenHeight * 0.5,
-                    color: const Color.fromARGB(255, 149, 193, 154),
+                    color: Theme.of(context).colorScheme.primary,
                   ),
                   Positioned(
-                    top: screenHeight * 0.1 - 60,
+                    top: screenHeight * 0.04,
                     left: (screenWidth / 2) - 60,
                     child: Container(
                       width: 120,
                       height: 120,
-                      decoration: const BoxDecoration(
+                      decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.onPrimary,
                         boxShadow: [
                           BoxShadow(
                             blurRadius: 6,
@@ -37,11 +37,11 @@ class ProfilePage extends StatelessWidget {
                           ),
                         ],
                       ),
-                      child: const Center(
+                      child: Center(
                         child: Icon(
                           Icons.person,
                           size: 80,
-                          color: Colors.grey,
+                          color: Theme.of(context).colorScheme.tertiary,
                         ),
                       ),
                     ),
@@ -51,10 +51,10 @@ class ProfilePage extends StatelessWidget {
                     left: 16,
                     child: SafeArea(
                       child: IconButton(
-                        icon: const Icon(
+                        icon: Icon(
                           Icons.home,
                           size: 30,
-                          color: Color.fromARGB(255, 12, 42, 0),
+                          color: Theme.of(context).colorScheme.onPrimary,
                         ),
                         onPressed: () {
                           Navigator.pop(context);
@@ -68,13 +68,14 @@ class ProfilePage extends StatelessWidget {
                     right: 0,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
+                      children: [
                         Text(
                           'Paul Jacobs',
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 50,
                             fontWeight: FontWeight.bold,
+                            color: Theme.of(context).colorScheme.onPrimary,
                           ),
                         ),
                         SizedBox(height: 8),
@@ -83,6 +84,7 @@ class ProfilePage extends StatelessWidget {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 15,
+                            color: Theme.of(context).colorScheme.onPrimary,
                           ),
                         ),
                       ],
@@ -99,9 +101,9 @@ class ProfilePage extends StatelessWidget {
                 child: Container(
                   width: double.infinity,
                   height: boxHeight,
-                  padding: const EdgeInsets.all(16.0),
+                  padding: EdgeInsets.all(16.0),
                   decoration: BoxDecoration(
-                    color: Colors.green.shade100,
+                    color: Theme.of(context).colorScheme.secondary,
                     borderRadius: BorderRadius.circular(16.0),
                   ),
                   child: Column(
@@ -145,7 +147,7 @@ class ProfilePage extends StatelessWidget {
                   height: boxHeight,
                   padding: const EdgeInsets.all(16.0),
                   decoration: BoxDecoration(
-                    color: Colors.green.shade100,
+                    color: Theme.of(context).colorScheme.secondary,
                     borderRadius: BorderRadius.circular(16.0),
                   ),
                   child: Column(

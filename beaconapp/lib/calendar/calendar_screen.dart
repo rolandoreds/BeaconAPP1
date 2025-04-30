@@ -66,8 +66,15 @@ class _CalendarPageState extends State<CalendarPage> {
     return Scaffold(
       drawer: MenuWidget(),
       appBar: AppBar(
-        title: const Text('Calendar'),
-        //automaticallyImplyLeading: false,
+        title: Text(
+            'Calendar',
+            style: TextStyle(
+              fontSize: 20,
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
+          ),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        centerTitle: true,
       ),
       body: LayoutBuilder(
         builder: (context, constraints) {
@@ -135,7 +142,7 @@ class _CalendarPageState extends State<CalendarPage> {
   // Method that creates the Icon used at the top of the SlidingUpPanel
   Widget buildDragIcon() => Container(
         decoration: BoxDecoration(
-          color: Colors.grey,
+          color: Theme.of(context).colorScheme.tertiary,
           borderRadius: BorderRadius.circular(8),
         ),
         width: 50,
