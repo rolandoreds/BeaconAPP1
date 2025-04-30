@@ -15,20 +15,22 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       // The drawer slides in from the left.
       drawer: MenuWidget(),
+      // The app bar at the top of the screen.
+      // It contains the title and an icon button to navigate to the profile page.
       appBar: AppBar(
-        title: const Padding(
+        iconTheme: IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
+        title: Padding(
           padding: EdgeInsets.only(top: 0.0),
-          child: Text(
-            'Home Page',
-            style: TextStyle(
-              fontSize: 20,
-              color: Color.fromARGB(255, 8, 35, 3),
-            ),
+          child: Image(
+            image: const AssetImage('assets/logo/CanadaCollegeLogo.png'),
+            fit: BoxFit.cover,
+            height: 50.0,
           ),
         ),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: const Color.fromARGB(255, 149, 193, 154),
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        // The icon button in the app bar to navigate to the profile page.
         actions: [
           IconButton(
             icon: const Icon(Icons.person),
@@ -56,7 +58,7 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(16.0),
               margin: const EdgeInsets.only(bottom: 16.0),
               decoration: BoxDecoration(
-                color: Colors.green.shade100,
+                color: Theme.of(context).colorScheme.secondary,
                 borderRadius: BorderRadius.circular(16.0),
               ),
               child: Column(
@@ -84,7 +86,7 @@ class _HomePageState extends State<HomePage> {
               padding: const EdgeInsets.all(16.0),
               margin: const EdgeInsets.only(bottom: 16.0),
               decoration: BoxDecoration(
-                color: Colors.green.shade100,
+                color: Theme.of(context).colorScheme.secondary,
                 borderRadius: BorderRadius.circular(16.0),
               ),
               child: Column(
@@ -113,7 +115,7 @@ class _HomePageState extends State<HomePage> {
             child: Container(
               padding: const EdgeInsets.all(16.0),
               decoration: BoxDecoration(
-                color: Colors.green.shade100,
+                color: Theme.of(context).colorScheme.secondary,
                 borderRadius: BorderRadius.circular(16.0),
               ),
               child: Column(

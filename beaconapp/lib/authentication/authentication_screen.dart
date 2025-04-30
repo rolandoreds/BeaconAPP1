@@ -16,16 +16,12 @@ import 'package:beaconapp/home.dart';
 /// Global repository instance so any widget can call `authenticate()`.
 final AuthRepository authRepo = AuthRepository();
 
-/*
- * AuthRepository — loads two text assets into an in‑memory Map for O(1) lookup (CIS 286)
- * By: Edwin Dominguez AKA PAPI
- * Notes: I'm realizing by the day how much I don't like Java...
- */
+/// Authentication repository that loads usr name & paswrds from text files
 class AuthRepository {
-  late final Map<String, String> _creds; // username → password
+  late Map<String, String> _creds; // username → password
 
   // grabs dat file thats in the repective dir path
-  Future<void> grabdat() async {
+  Future<void> grabdat() async { 
     final usernames = await _loadLines('assets/tmpFiles/usernames.txt');
     final passwords = await _loadLines('assets/tmpFiles/passwords.txt');
     final len = usernames.length < passwords.length ? usernames.length : passwords.length;
@@ -48,11 +44,7 @@ class AuthRepository {
   }
 }
 
-/* *
- * Class: AuthenticationTextFormField — stateless reusable field with inline validation
- * By: Yours truly, Edwin
- * Notes: I forgot what I was going to say *** do this later
- */
+/// A reusable text form field for authentication with validation.
 class AuthenticationTextFormField extends StatelessWidget {
   const AuthenticationTextFormField({
     super.key,
@@ -107,10 +99,7 @@ class AuthenticationTextFormField extends StatelessWidget {
   }
 }
 
-/*
- * Class: AuthenticationScreen used by your main.dart
- * Note: Um, remind me to add notes to functions but I Wanna push and go to class
-*/ 
+/// main authentication screen that contains the login form
 class AuthenticationScreen extends StatefulWidget {
   const AuthenticationScreen({super.key});
 
@@ -118,6 +107,8 @@ class AuthenticationScreen extends StatefulWidget {
   State<AuthenticationScreen> createState() => _AuthenticationScreenState();
 }
 
+/// State class for the authentication screen.
+/// It manages the form state and handles user input.
 class _AuthenticationScreenState extends State<AuthenticationScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey();
   final _usernameCtrl = TextEditingController();

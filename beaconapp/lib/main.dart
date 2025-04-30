@@ -13,13 +13,12 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-
         colorScheme: ColorScheme.fromSeed(
-          seedColor: Color.fromARGB(255, 58, 101, 62),
+          seedColor: Colors.black,
           primary: const Color.fromARGB(255, 58, 101, 62),
+          onPrimary: Colors.white,
           secondary: Colors.green.shade100,
           tertiary: Colors.grey,
-          onPrimary: Colors.white,
         ),
         useMaterial3: true,
       ),
